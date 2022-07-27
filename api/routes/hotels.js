@@ -1,24 +1,29 @@
-import express from "express"
-const router = express.Router()
+import express from "express";
+import {
+  countByCity,
+  countByType,
+  createHotel,
+  deleteHotel,
+  getHotel,
+  getHotelRooms,
+  getHotels,
+  updateHotel,
+} from "../controllers/hotel.js";
+import Hotel from "../models/Hotel.js";
+import { verifyAdmin } from "../utils/verifyToken.js"
+const router = express.Router();
 
-import Hotel from "../models/Hotel"
+router.post("/", verifyAdmin, createHotel);
 
-router.post('/', async(req,res)=>{
-  const newHotel = new Hotel(req.body)
+router.put("/:id", verifyAdmin, updateHotel);
 
-  try{
-    const savedHotel = await newHotel.save()
-    res.status(200).json(savedHotel)
-  }catch(err){
-    res.status(500).json(err)
-  }
-})
+router.delete("/:id", verifyAdmin, deleteHotel);
 
-router.put('/:id', async(req,res)=>{
-  try{
-    const updatedHotel = await Hotel.findByIdAndUpdate(req.params.id, req.body, {new: true})
-    res.status(200).json(updatedHotel)
-  }catch(err){
-    res.status(500).json(err)
-  }
-}
+router.get("/find/:id", getHotel);
+
+router.get("/", getHotels);
+router.get("/countByCity", countByCity);
+router.get("/countByType", countByType);
+router.get("/room/:id", getHotelRooms);
+
+export default router;

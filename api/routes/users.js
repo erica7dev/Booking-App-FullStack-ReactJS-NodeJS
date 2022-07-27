@@ -1,12 +1,20 @@
-import express from "express"
-const router = express.Router()
+import express from "express";
+import {
+  updateUser,
+  deleteUser,
+  getUser,
+  getUsers,
+} from "../controllers/user.js";
+import { verifyAdmin, verifyToken, verifyUser } from "../utils/verifyToken.js";
 
-router.get('/', (req,res) => {
-  res.send('Hello World')
-})
+const router = express.Router();
 
-router.get('/register', (req,res) => {
-  res.send('Hello, this is auth register endpoint')
-})
+router.put("/:id", verifyUser, updateUser);
 
-export default router
+router.delete("/:id", verifyUser, deleteUser);
+
+router.get("/:id", verifyUser, getUser);
+
+router.get("/", verifyAdmin, getUsers);
+
+export default router;
