@@ -13,6 +13,8 @@ const mode = process.env.NODE_ENV
 const app = express()
 
 //middlewares
+app.use(express.json())
+
 app.use('/api/auth', authRoute)
 app.use('/api/users', usersRoute)
 app.use('/api/hotels', roomsRoute)
